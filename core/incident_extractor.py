@@ -11,7 +11,7 @@ from model.incident import Incident
 from model.incident_prompt import INCIDENT_PROMPT_TEMPLATE
 import os
 
-OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://host.docker.internal:11434")
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 
 class IncidentExtractor:
     """

@@ -1,23 +1,20 @@
-# Imagem base estável
 FROM python:3.12-slim
 
-# Evita bytecode e buffer estranho
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Diretório de trabalho
 WORKDIR /app
 
-# Dependências primeiro (cache)
 COPY requirements.txt .
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia o código
-COPY . .
+# Install curl for the health check in docker_start.sh
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Porta da API
+COPY . .
+COPY docker_start.sh .
+RUN chmod +x docker_start.sh
+
 EXPOSE 8000
 
-# Comando de inicialização
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["./docker_start.sh"]
